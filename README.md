@@ -67,6 +67,12 @@ boost run
 boost mvnrun
 ```
 
+* 停止当前目录所代表的应用
+
+``` bash
+boost stop
+```
+
 ## TODO
 * 添加 stop
 

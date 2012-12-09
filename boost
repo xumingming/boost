@@ -167,6 +167,7 @@ boost_help() {
     echo -e "\tboost eclipse         为应用生成eclipse工程文件"
     echo -e "\tboost run             运行当前应用"
     echo -e "\tboost mvnrun          编译并且运行当前应用"
+    echo -e "\tboost stop            停止当前目录所代表的应用"
     echo -e "\tboost log             以tail命令查看当前应用的日志"
     echo -e "\tboost elog            以emacs命令查看当前应用的日志";
 }
