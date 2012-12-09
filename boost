@@ -169,7 +169,7 @@ appinfo() {
     debug_port=`get_debug_port`
     appname=`appname`
     echo "${appname}的信息如下:"
-    echo "\t调试端口: ${debug_port}"
+    echo -e "\t调试端口: ${debug_port}"
 }
 
 boost_help() {
