@@ -96,8 +96,8 @@ jmvnrun() {
 # NOTE: 该命令通过当前目录的名字自动判断你的应用名字
 #       所以你的目录名字要规范
 gen_antx() {
-    echo "app name is $appname"
     appname="`appname`"
+    echo "app name is $appname"
     fullpath=`pwd`
     dir=`dirname $fullpath`
     echo "Generating antx file to $dir/antx_$appname.properties"
