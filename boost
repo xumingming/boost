@@ -158,6 +158,20 @@ checkout_newest_code() {
     svn co $branch_path $local_branch_name
 }
 
+get_debug_port() {
+    curpath=`pwd`
+    debug_port=`jps -v | grep ${curpath} | awk '{print $18}' | cut -d, -f2 | cut -d= -f2`
+    echo $debug_port
+}
+
+# 显示应用运行时的一些信息
+appinfo() {
+    debug_port=`get_debug_port`
+    appname=`appname`
+    echo "${appname}的信息如下:"
+    echo "\t调试端口: ${debug_port}"
+}
+
 boost_help() {
     echo -e "\tboost help            打印这个帮助"
     echo -e "\tboost init <crid>     初始化项目目录，crid为项目的Aone crid"
@@ -167,6 +181,7 @@ boost_help() {
     echo -e "\tboost eclipse         为应用生成eclipse工程文件"
     echo -e "\tboost run             运行当前应用"
     echo -e "\tboost mvnrun          编译并且运行当前应用"
+    echo -e "\tboost appinfo         查看应用的一些信息(这个命令只有在应用运行是才行)"
     echo -e "\tboost stop            停止当前目录所代表的应用"
     echo -e "\tboost log             以tail命令查看当前应用的日志"
     echo -e "\tboost elog            以emacs命令查看当前应用的日志";
@@ -202,6 +217,9 @@ boost() {
             ;;
         mvnrun)
             jmvnrun
+            ;;
+        appinfo)
+            appinfo
             ;;
         stop)
             boost_stop
