@@ -142,7 +142,8 @@ get_branch_idx() {
 #   $1 应用名
 checkout_newest_code() {
     is_project=`is_project_folder`
-    if [ "$is_project"="flase" ] ; then
+    echo "$is_project"
+    if [ "$is_project" == "false" ] ; then
         echo "Current directory(`pwd`) is not a project folder"
         exit 1
     fi
