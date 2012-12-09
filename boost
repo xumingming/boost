@@ -176,6 +176,10 @@ boost_help() {
     echo -e "\tboost help            打印这个帮助"
     echo -e "\tboost init <crid>     初始化项目目录，crid为项目的Aone crid"
     echo -e "\tboost co <appname>    把应用最新分支的代码拉到当前目录"
+    echo
+    echo -e "\t|---------------------------------------------------"
+    echo -e "\t| 以下命令为具体应用相关的命令必须在应用的目录里面运行    "
+    echo -e "\t|---------------------------------------------------"
     echo -e "\tboost antx            为当前应用生成antx配置文件"
     echo -e "\tboost mvn             编译当前的应用"
     echo -e "\tboost eclipse         为应用生成eclipse工程文件"
