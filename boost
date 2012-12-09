@@ -13,7 +13,9 @@ init_project() {
 # 文件夹里面有没有.crid文件
 is_project_folder() {
     if [ -f .crid ] ; then
-        echo "valid";
+        echo "true"
+    else
+        echo "false"
     fi
 }
 
@@ -139,6 +141,12 @@ get_branch_idx() {
 # 参数:
 #   $1 应用名
 checkout_newest_code() {
+    is_project=`is_project_folder`
+    if [ "$is_project"="flase" ] ; then
+        echo "Current directory(`pwd`) is not a project folder"
+        exit 1
+    fi
+
     appname=$1
     crid=`get_crid`
     branch_path=`get_newest_branch_path $appname $crid`
@@ -200,3 +208,5 @@ boost() {
             ;;
     esac
 }
+
+boost $*
