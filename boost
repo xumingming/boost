@@ -1,0 +1,202 @@
+#!/bin/bash 
+
+# 初始化一个项目，目前只是简单地把当前项目的Aone CRID写到
+# 当前目录的.crid文件
+# 参数:
+#   $1 当前项目的CRID
+init_project() {
+    crid=$1
+    echo $crid > .crid
+}
+
+# 检查当前文件夹是不是一个项目文件夹，现在的逻辑是检查当前
+# 文件夹里面有没有.crid文件
+is_project_folder() {
+    if [ -f .crid ] ; then
+        echo "valid";
+    fi
+}
+
+# 检查BOOST_HOME环境变量是否设置了。
+# 要求设置这个变量主要是因为我们要在$BOOST_HOME/antx这个
+# 目录下面寻找各个应用的antx模板
+is_boost_home_set() {
+    # FIXME
+    echo "hello world"
+}
+
+# 获取当前项目的CRID
+get_crid() {
+    cat .crid
+}
+
+# 根据当前目录的名字获取当前的应用名，该命令期望的目录名字是这样的:
+#     <appname>_<branch_idx>
+# 比如luna_3， luna是应用名，3是branch_idx，表示在该项目中luna
+# 应用已经切换过三次分支了, 由boost co 拉下的代码目录是符合这个
+# 名字的，你也可以自己重命名目录名字以符合这个简单要求。
+appname() {
+    curpath=`pwd`
+    curname=`basename $curpath | sed 's/_.*$//g'`
+    echo $curname
+}
+
+# 以emacs程序打开当前应用的日志
+elog() {
+    emacs ~/output/`appname`/logs/sys/webx/webx.log
+}
+
+# 以tail程序打开当前应用的日志
+tlog() {
+    tail -f ~/output/`appname`/logs/sys/webx/webx.log
+}
+
+# 编译当前应用，并且把相关jar/war包安装到本地的maven仓库
+# NOTE 改命令会自动去上层目录寻找名为antx_<appname>.properties
+# 的文件作为该项目的antx配置文件
+jmvn () {
+    echo "app name is `appname`"
+    mvn clean install -DuserProp=../antx_`appname`.properties -Dmaven.test.skip=true -DskipValidation=true
+}
+
+# 运行该项目
+jrun() {
+    appname=`appname`
+    case $appname in 
+        # marketing_center
+        mc)
+            ./deploy/target/web-deploy/bin/start-service.sh
+            ;;
+        # tradecenter
+        tc)
+            ./tradecenter.deploy/target/web-deploy/bin/start-service.sh
+            ;;
+        *)
+            ./deploy/target/web-deploy/bin/jettyctl.sh run
+            ;;
+    esac
+
+}
+
+# 编译当前应用并且运行
+jmvnrun() {
+    jmvn && jrun
+}
+
+# 为当前应用生成antx配置文件
+# 这个antx配置文件是根据$BOOST_HOME/antx/antx_<appname>.properties
+# 这个模板文件生成而成的，想要能够自动生成antx文件你必要要在
+# $BOOST_HOME/antx目录下面有对应的模板文件，自动生成的antx文件会帮你
+# 把模板文件里面的对应的用户名、HOME目录，PROJECT目录等等替换成你当前
+# 机器的用户名、HOME目录以及该项目的PROJECT等等。可以看看
+# $BOOST_HOME/antx/antx_luna.properties作为参考
+#
+# NOTE: 该命令通过当前目录的名字自动判断你的应用名字
+#       所以你的目录名字要规范
+gen_antx() {
+    echo "app name is $appname"
+    appname="`appname`"
+    fullpath=`pwd`
+    dir=`dirname $fullpath`
+    echo "Generating antx file to $dir/antx_$appname.properties"
+    cat ${BOOST_HOME}/antx/antx_${appname}.properties | sed "s/USER_NAME/$LOGNAME/g;s@USER_HOME@$HOME@g;s@PROJECT_HOME@`pwd`@g" > $dir/antx_$appname.properties
+}
+
+# 获取项目中某个应用的最新分支名称
+# 参数:
+#   $1 应用名称，比如luna
+#   $2 项目的CRID
+get_newest_branch_name() {
+    appname=$1
+    crid=$2
+    branch_name=`svn ls http://svn.alibaba-inc.com/repos/ali_china/olps/${appname}/branches/ | grep _${crid}_ | tail -n 1`
+    branch_name=${branch_name%%/*}
+    echo $branch_name
+}
+
+# 获取项目中某个应用的最小分支路径
+# 参数
+#   $1 应用名称，比如luna
+#   $2 项目的CRID
+get_newest_branch_path() {
+    appname=$1
+    crid=$2
+    branch_name=`get_newest_branch_name $appname $crid`
+    echo http://svn.alibaba-inc.com/repos/ali_china/olps/${appname}/branches/${branch_name}
+}
+
+# 从分支的名字里面把当前分支的序号提取出来
+# NOTE: 这个序号在checkout代码的时候会有用的
+# 参数
+#   $1 分支的名字
+get_branch_idx() {
+    branch_name=$1
+    branch_idx=${branch_name##*_}
+    echo $branch_idx
+}
+
+# 为项目里面的指定的应用获取最新的代码
+# 参数:
+#   $1 应用名
+checkout_newest_code() {
+    appname=$1
+    crid=`get_crid`
+    branch_path=`get_newest_branch_path $appname $crid`
+    branch_name=`get_newest_branch_name $appname $crid`
+    branch_idx=`get_branch_idx $branch_name`
+    local_branch_name=${appname}_${branch_idx}
+    echo "Checking out code from: " $branch_path " to " $local_branch_name
+    svn co $branch_path $local_branch_name
+}
+
+boost_help() {
+    echo -e "\tboost help            打印这个帮助"
+    echo -e "\tboost init <crid>     初始化项目目录，crid为项目的Aone crid"
+    echo -e "\tboost co <appname>    把应用最新分支的代码拉到当前目录"
+    echo -e "\tboost antx            为当前应用生成antx配置文件"
+    echo -e "\tboost mvn             编译当前的应用"
+    echo -e "\tboost eclipse         为应用生成eclipse工程文件"
+    echo -e "\tboost run             运行当前应用"
+    echo -e "\tboost mvnrun          编译并且运行当前应用"
+    echo -e "\tboost log             以tail命令查看当前应用的日志"
+    echo -e "\tboost elog            以emacs命令查看当前应用的日志";
+}
+
+# 主入口
+boost() {
+    case $1 in
+        init)
+            init_project $2
+            ;;
+        co)
+            checkout_newest_code $2
+            ;;
+        antx)
+            gen_antx
+            ;;
+        mvn)
+            jmvn
+            ;;
+        eclipse)
+            mvn eclipse:eclipse
+            ;;
+        run)
+            jrun
+            ;;
+        mvnrun)
+            jmvnrun
+            ;;
+        log)
+            tlog
+            ;;
+        elog)
+            elog
+            ;;
+        help)
+            boost_help
+            ;;
+        *)
+            boost_help
+            ;;
+    esac
+}
