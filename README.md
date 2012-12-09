@@ -73,9 +73,6 @@ boost mvnrun
 boost stop
 ```
 
-## TODO
-* 添加 stop
-
 ## License
 
 Copyright (C) 2012 xumingming
