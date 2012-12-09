@@ -171,6 +171,13 @@ boost_help() {
     echo -e "\tboost elog            以emacs命令查看当前应用的日志";
 }
 
+boost_stop() {
+    dirpath=`pwd`
+    pid=`jps -v | grep $dirpath | cut -d" " -f1`
+    kill -9 $pid
+    echo "Killed `appname`(pid: $pid)"
+}
+
 # 主入口
 boost() {
     case $1 in
@@ -194,6 +201,9 @@ boost() {
             ;;
         mvnrun)
             jmvnrun
+            ;;
+        stop)
+            boost_stop
             ;;
         log)
             tlog
