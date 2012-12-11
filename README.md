@@ -65,7 +65,7 @@ mkdir ~/local/svn/<project_name>
 boost init <CRID>
 ```
 
-* 假设这个项目需要修改到luna，你已经在Aone上创建了项目分支，执行下面这个命令自动拉分支
+* 假设这个项目需要修改到luna，你已经在Aone上创建了luna分支，执行下面这个命令自动拉分支
 
 ``` bash
 boost co luna
