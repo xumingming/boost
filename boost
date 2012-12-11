@@ -40,7 +40,7 @@ get_crid() {
 # 名字的，你也可以自己重命名目录名字以符合这个简单要求。
 appname() {
     curpath=`pwd`
-    curname=`basename $curpath | sed 's/_.*$//g'`
+    curname=`basename $curpath | sed 's/_[^_]*$//g'`
     echo $curname
 }
 
