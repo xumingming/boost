@@ -7,6 +7,7 @@
 init_project() {
     crid=$1
     echo $crid > .crid
+    echo "初始化项目信息成功。"
 }
 
 # 检查当前文件夹是不是一个项目文件夹，现在的逻辑是检查当前
@@ -57,7 +58,7 @@ tlog() {
 # NOTE 改命令会自动去上层目录寻找名为antx_<appname>.properties
 # 的文件作为该项目的antx配置文件
 jmvn () {
-    echo "app name is `appname`"
+    echo "开始编译`appname`"
     mvn clean install -DuserProp=../antx_`appname`.properties -Dmaven.test.skip=true -DskipValidation=true
 }
 
@@ -97,11 +98,14 @@ jmvnrun() {
 #       所以你的目录名字要规范
 gen_antx() {
     appname="`appname`"
-    echo "app name is $appname"
-    fullpath=`pwd`
-    dir=`dirname $fullpath`
-    echo "Generating antx file to $dir/antx_$appname.properties"
-    cat ${BOOST_HOME}/antx/antx_${appname}.properties | sed "s/USER_NAME/$LOGNAME/g;s@USER_HOME@$HOME@g;s@PROJECT_HOME@`pwd`@g" > $dir/antx_$appname.properties
+    if [ -f $BOOST_HOME/antx/antx_${appname}.properties ]; then
+        fullpath=`pwd`
+        dir=`dirname $fullpath`
+        echo "生成antx配置文件: $dir/antx_$appname.properties"
+        cat ${BOOST_HOME}/antx/antx_${appname}.properties | sed "s/USER_NAME/$LOGNAME/g;s@USER_HOME@$HOME@g;s@PROJECT_HOME@`pwd`@g" > $dir/antx_$appname.properties
+    else
+        echo "没有找到应用${appname}所对应的antx模板文件。如果您确认应用名正确，请把该应用的antx模板添加到${BOOST_HOME}/antx/目录下，然后再试一次。"
+    fi
 }
 
 # 获取项目中某个应用的最新分支名称
@@ -142,9 +146,8 @@ get_branch_idx() {
 #   $1 应用名
 checkout_newest_code() {
     is_project=`is_project_folder`
-    echo "$is_project"
     if [ "$is_project" == "false" ] ; then
-        echo "Current directory(`pwd`) is not a project folder"
+        echo "当前目录(`pwd`)不是一个合法的项目目录(忘记运行boost init了?)。"
         exit 1
     fi
 
@@ -152,10 +155,14 @@ checkout_newest_code() {
     crid=`get_crid`
     branch_path=`get_newest_branch_path $appname $crid`
     branch_name=`get_newest_branch_name $appname $crid`
-    branch_idx=`get_branch_idx $branch_name`
-    local_branch_name=${appname}_${branch_idx}
-    echo "Checking out code from: " $branch_path " to " $local_branch_name
-    svn co $branch_path $local_branch_name
+    if (( ${#branch_name} > 0 )); then
+        branch_idx=`get_branch_idx $branch_name`
+        local_branch_name=${appname}_${branch_idx}
+        svn co $branch_path $local_branch_name
+        echo "从: " $branch_path " 下载代码到: " $local_branch_name
+    else
+        echo "该项目中没有这个应用(${appname})"
+    fi
 }
 
 get_debug_port() {
