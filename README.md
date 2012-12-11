@@ -45,6 +45,12 @@ export BOOST_HOME=/path/to/your/boost
 export PATH=$PATH:$BOOST_HOME
 ```
 
+* 设置脚本权限
+
+``` bash
+chmod a+x $BOOST_HOME/boost
+```
+
 ## 用法
 
 * 当你在Aone上创建了一个新的需求之后，你在本地文件系统上为这个项目创建一个目录, 我一般都习惯放在`~/local/svn/<project_home>`
