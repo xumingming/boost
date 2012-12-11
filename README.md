@@ -71,7 +71,7 @@ boost init <CRID>
 boost co luna
 ```
 
-* 有的应用的代码之后，我们一般需要编译应用，不过阿里系的代码编译都需要Antx配置文件，我们先生成Antx配置文件
+* 有了应用的代码之后，我们需要编译应用，不过阿里系的代码编译都需要Antx配置文件，我们先生成Antx配置文件
 
 ``` bash
 cd luna_1      # 进入luna代码目录
@@ -101,6 +101,8 @@ boost mvnrun
 ``` bash
 boost stop
 ```
+
+对于任何应用都是这么几个命令，就是这么简单! 让它把你从重复地敲命令烦恼中解救出来吧。
 
 ## License
 
