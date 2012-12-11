@@ -24,8 +24,11 @@ is_project_folder() {
 # 要求设置这个变量主要是因为我们要在$BOOST_HOME/antx这个
 # 目录下面寻找各个应用的antx模板
 is_boost_home_set() {
-    # FIXME
-    echo "hello world"
+    if [ "${BOOST_HOME}" == "" ]; then
+        echo "false"
+    else
+        echo "true"
+    fi
 }
 
 # 获取当前项目的CRID
