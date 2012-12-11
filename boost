@@ -5,9 +5,14 @@
 # 参数:
 #   $1 当前项目的CRID
 init_project() {
-    crid=$1
-    echo $crid > .crid
-    echo "初始化项目信息成功。"
+    boost_home_set=`is_boost_home_set`
+    if [ "$boost_home_set" == "false" ] ; then
+        echo "你没有设置BOOST_HOME环境变量"
+    else
+        crid=$1
+        echo $crid > .crid
+        echo "初始化项目信息成功。"
+    fi
 }
 
 # 检查当前文件夹是不是一个项目文件夹，现在的逻辑是检查当前
@@ -148,23 +153,25 @@ get_branch_idx() {
 # 参数:
 #   $1 应用名
 checkout_newest_code() {
+    boost_home_set=`is_boost_home_set`
     is_project=`is_project_folder`
-    if [ "$is_project" == "false" ] ; then
+    if [ "$boost_home_set" == "false" ] ; then
+        echo "你没有设置BOOST_HOME环境变量"
+    elif [ "$is_project" == "false" ] ; then
         echo "当前目录(`pwd`)不是一个合法的项目目录(忘记运行boost init了?)。"
-        exit 1
-    fi
-
-    appname=$1
-    crid=`get_crid`
-    branch_path=`get_newest_branch_path $appname $crid`
-    branch_name=`get_newest_branch_name $appname $crid`
-    if (( ${#branch_name} > 0 )); then
-        branch_idx=`get_branch_idx $branch_name`
-        local_branch_name=${appname}_${branch_idx}
-        svn co $branch_path $local_branch_name
-        echo "从: " $branch_path " 下载代码到: " $local_branch_name
     else
-        echo "该项目中没有这个应用(${appname})"
+        appname=$1
+        crid=`get_crid`
+        branch_path=`get_newest_branch_path $appname $crid`
+        branch_name=`get_newest_branch_name $appname $crid`
+        if (( ${#branch_name} > 0 )); then
+            branch_idx=`get_branch_idx $branch_name`
+            local_branch_name=${appname}_${branch_idx}
+            svn co $branch_path $local_branch_name
+            echo "从: " $branch_path " 下载代码到: " $local_branch_name
+        else
+            echo "该项目中没有这个应用(${appname})"
+        fi
     fi
 }
 
