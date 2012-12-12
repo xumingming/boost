@@ -101,11 +101,11 @@ jrun() {
     appname=`appname`
     case $appname in 
         # marketing_center
-        mc)
+        marketing_center)
             ./deploy/target/web-deploy/bin/start-service.sh
             ;;
         # tradecenter
-        tc)
+        tradecenter)
             ./tradecenter.deploy/target/web-deploy/bin/start-service.sh
             ;;
         *)
