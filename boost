@@ -1,6 +1,25 @@
 #!/bin/bash 
 
-shared_libs=pylon
+shared_libs=pylon:trade_shared
+common_libs=pylon
+
+# 判断一个应用是不是**公共**二方库
+# NOTE: 如果你有一个新的二方库，请添加到$common_libs变量里面去
+# 参数:
+# $1  应用名
+is_common_lib() {
+    result="false"
+    appname=$1
+    for i in `echo $common_libs | sed 's/:/ /g'`
+    do 
+        if [ "$appname" == "$i" ]; then
+            result="true"
+            break
+        fi
+    done
+
+    echo $result
+}
 
 # 判断一个应用是不是二方库
 # NOTE: 如果你有一个新的二方库，请添加到$shared_libs变量里面去
@@ -19,6 +38,7 @@ is_shared_lib() {
 
     echo $result
 }
+
 
 # 初始化一个项目，目前只是简单地把当前项目的Aone CRID写到
 # 当前目录的.crid文件
@@ -165,9 +185,9 @@ gen_antx() {
 #   $1 应用名
 get_svn_base_path() {
     appname=$1
-    is_shared=`is_shared_lib $appname`
+    is_common=`is_common_lib $appname`
     svn_base_path="http://svn.alibaba-inc.com/repos/ali_china/olps"
-    if [ "$is_shared" == "true" ]; then
+    if [ "$is_common" == "true" ]; then
          svn_base_path="http://svn.alibaba-inc.com/repos/ali_china/commons"
     fi
 
