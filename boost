@@ -86,8 +86,14 @@ tlog() {
 # NOTE 改命令会自动去上层目录寻找名为antx_<appname>.properties
 # 的文件作为该项目的antx配置文件
 jmvn () {
-    echo "开始编译`appname`"
-    mvn clean install -DuserProp=../antx_`appname`.properties -Dmaven.test.skip=true -DskipValidation=true
+    appname=`appname`
+    is_shared=`is_shared_lib ${appname}`
+    echo "开始编译${appname}"
+    if [ "$is_shared" == "true" ]; then
+        mvn clean install
+    else
+        mvn clean install -DuserProp=../antx_`appname`.properties -Dmaven.test.skip=true -DskipValidation=true
+    fi
 }
 
 # 运行该项目
