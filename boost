@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-shared_libs=pylon:trade_shared
+shared_libs=pylon
 
 # 判断一个应用是不是二方库
 # NOTE: 如果你有一个新的二方库，请添加到$shared_libs变量里面去
