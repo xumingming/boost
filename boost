@@ -72,14 +72,32 @@ appname() {
     echo $curname
 }
 
+# 获取应用的日志文件路径
+# 参数
+#   $1 应用名
+get_log_path() {
+    case $appname in
+        tradecenter)
+          echo ~/output/`appname`/logs/6100/sys/sys.log
+          ;;
+        *)
+          echo ~/output/`appname`/logs/sys/webx/webx.log
+          ;;
+    esac
+}
+
 # 以emacs程序打开当前应用的日志
 elog() {
-    emacs ~/output/`appname`/logs/sys/webx/webx.log
+    appname=`appname`
+    log_path=`get_log_path ${appname}`
+    emacs ${log_path}
 }
 
 # 以tail程序打开当前应用的日志
 tlog() {
-    tail -f ~/output/`appname`/logs/sys/webx/webx.log
+    appname=`appname`
+    log_path=`get_log_path ${appname}`
+    tail -f ${log_path}
 }
 
 # 编译当前应用，并且把相关jar/war包安装到本地的maven仓库
