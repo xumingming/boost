@@ -1,5 +1,25 @@
 #!/bin/bash 
 
+shared_libs=pylon:trade_shared
+
+# 判断一个应用是不是二方库
+# NOTE: 如果你有一个新的二方库，请添加到$shared_libs变量里面去
+# 参数:
+# $1  应用名
+is_shared_lib() {
+    result="false"
+    appname=$1
+    for i in `echo $shared_libs | sed 's/:/ /g'`
+    do 
+        if [ "$appname" == "$i" ]; then
+            result="true"
+            break
+        fi
+    done
+
+    echo $result
+}
+
 # 初始化一个项目，目前只是简单地把当前项目的Aone CRID写到
 # 当前目录的.crid文件
 # 参数:
@@ -116,6 +136,20 @@ gen_antx() {
     fi
 }
 
+# 获取svn的基本路径，这个主要是因为普通应用跟二方库不在一个路径下
+# 参数:
+#   $1 应用名
+get_svn_base_path() {
+    appname=$1
+    is_shared=`is_shared_lib $appname`
+    svn_base_path="http://svn.alibaba-inc.com/repos/ali_china/olps"
+    if [ "$is_shared" == "true" ]; then
+         svn_base_path="http://svn.alibaba-inc.com/repos/ali_china/commons"
+    fi
+
+    echo $svn_base_path
+}
+
 # 获取项目中某个应用的最新分支名称
 # 参数:
 #   $1 应用名称，比如luna
@@ -123,7 +157,8 @@ gen_antx() {
 get_newest_branch_name() {
     appname=$1
     crid=$2
-    branch_name=`svn ls http://svn.alibaba-inc.com/repos/ali_china/olps/${appname}/branches/ | grep _${crid}_ | tail -n 1`
+    svn_base_path=`get_svn_base_path $appname`
+    branch_name=`svn ls ${svn_base_path}/${appname}/branches/ | grep _${crid}_ | tail -n 1`
     branch_name=${branch_name%%/*}
     echo $branch_name
 }
@@ -135,8 +170,9 @@ get_newest_branch_name() {
 get_newest_branch_path() {
     appname=$1
     crid=$2
+    svn_base_path=`get_svn_base_path $appname`
     branch_name=`get_newest_branch_name $appname $crid`
-    echo http://svn.alibaba-inc.com/repos/ali_china/olps/${appname}/branches/${branch_name}
+    echo ${svn_base_path}/${appname}/branches/${branch_name}
 }
 
 # 从分支的名字里面把当前分支的序号提取出来
