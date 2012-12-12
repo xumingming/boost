@@ -97,7 +97,7 @@ elog() {
 tlog() {
     appname=`appname`
     log_path=`get_log_path ${appname}`
-    tail -f ${log_path}
+    tail -f -n 500 ${log_path}
 }
 
 # 编译当前应用，并且把相关jar/war包安装到本地的maven仓库
