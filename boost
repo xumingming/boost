@@ -289,6 +289,12 @@ boost_help() {
     echo -e "\tboost stop            停止当前目录所代表的应用"
     echo -e "\tboost log             以tail命令查看当前应用的日志"
     echo -e "\tboost llog            以less命令查看当前应用的日志";
+    echo
+    echo -e "\t|---------------------------------------------------"
+    echo -e "\t| 以下为高级命令(由上面的基本命令组合而成)                 "
+    echo -e "\t|---------------------------------------------------"
+    echo -e "\tboost applist         列出该项目涉及到的所有应用 TO BE IMPLEMENTED"
+    echo -e "\tboost coall           下载该项目的所有应用代码 TO BE IMPLEMENTED"
 }
 
 boost_stop() {
