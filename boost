@@ -100,6 +100,9 @@ get_log_path() {
         tradecenter)
           echo ~/output/`appname`/logs/6100/sys/sys.log
           ;;
+        myalibaba)
+          echo ~/output/`appname`/logs/sys/webx.log
+          ;;
         *)
           echo ~/output/`appname`/logs/sys/webx/webx.log
           ;;
