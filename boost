@@ -110,10 +110,10 @@ get_log_path() {
 }
 
 # 以emacs程序打开当前应用的日志
-elog() {
+llog() {
     appname=`appname`
     log_path=`get_log_path ${appname}`
-    emacs ${log_path}
+    less ${log_path}
 }
 
 # 以tail程序打开当前应用的日志
@@ -288,7 +288,7 @@ boost_help() {
     echo -e "\tboost appinfo         查看应用的一些信息(这个命令只有在应用运行是才行)"
     echo -e "\tboost stop            停止当前目录所代表的应用"
     echo -e "\tboost log             以tail命令查看当前应用的日志"
-    echo -e "\tboost elog            以emacs命令查看当前应用的日志";
+    echo -e "\tboost llog            以less命令查看当前应用的日志";
 }
 
 boost_stop() {
@@ -331,8 +331,8 @@ boost() {
         log)
             tlog
             ;;
-        elog)
-            elog
+        llog)
+            llog
             ;;
         help)
             boost_help
