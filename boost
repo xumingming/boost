@@ -267,9 +267,11 @@ get_debug_port() {
 # 显示应用运行时的一些信息
 appinfo() {
     debug_port=`get_debug_port`
+    crid=`cat .crid`
     appname=`appname`
     echo "${appname}的信息如下:"
     echo -e "\t调试端口: ${debug_port}"
+    echo -e "\tCRID:     ${crid}"
 }
 
 boost_help() {
