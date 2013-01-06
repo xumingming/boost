@@ -274,6 +274,11 @@ appinfo() {
     echo -e "\tCRID:     ${crid}"
 }
 
+# 显示svn日志
+svnlog() {
+    svn up && svn log --stop-on-copy
+}
+
 boost_help() {
     echo -e "\tboost help            打印这个帮助"
     echo -e "\tboost init <crid>     初始化项目目录，crid为项目的Aone crid"
@@ -292,6 +297,7 @@ boost_help() {
     echo -e "\tboost stop            停止当前目录所代表的应用"
     echo -e "\tboost log             以tail命令查看当前应用的日志"
     echo -e "\tboost llog            以less命令查看当前应用的日志"
+    echo -e "\tboost svnlog          显示svn日志"
 }
 
 boost_stop() {
@@ -339,6 +345,9 @@ boost() {
             ;;
         crid)
             get_crid
+            ;;
+        svnlog)
+            svnlog
             ;;
         help)
             boost_help
