@@ -178,6 +178,7 @@ gen_antx() {
         dir=`dirname $fullpath`
         echo "生成antx配置文件: $dir/antx_$appname.properties"
         cat ${BOOST_HOME}/antx/antx_${appname}.properties | sed "s/USER_NAME/$LOGNAME/g;s@USER_HOME@$HOME@g;s@PROJECT_HOME@`pwd`@g" > $dir/antx_$appname.properties
+        cat ../antx_$appname.properties
     else
         echo "没有找到应用${appname}所对应的antx模板文件。如果您确认应用名正确，请把该应用的antx模板添加到${BOOST_HOME}/antx/目录下，然后再试一次。"
     fi
