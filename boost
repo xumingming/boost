@@ -279,6 +279,17 @@ svnlog() {
     svn up && svn log --stop-on-copy
 }
 
+# 显示该分支跟trunk的diff
+trunkdiff() {
+    base_rev=`boost svnlog | tail -n 4 | head -n 1 | cut -d"|" -f1`
+    # trim
+    base_rev=`echo $base_rev`
+    base_rev=${base_rev:1}
+
+    echo "Diffing: svn diff -r${base_rev}:HEAD"
+    svn diff -r${base_rev}:HEAD
+}
+
 boost_help() {
     echo -e "\tboost help            打印这个帮助"
     echo -e "\tboost init <crid>     初始化项目目录，crid为项目的Aone crid"
@@ -298,6 +309,7 @@ boost_help() {
     echo -e "\tboost log             以tail命令查看当前应用的日志"
     echo -e "\tboost llog            以less命令查看当前应用的日志"
     echo -e "\tboost svnlog          显示svn日志"
+    echo -e "\tboost trunkdiff       显示该分支跟trunk的diff"
 }
 
 boost_stop() {
@@ -348,6 +360,9 @@ boost() {
             ;;
         svnlog)
             svnlog
+            ;;
+        trunkdiff)
+            trunkdiff
             ;;
         help)
             boost_help
