@@ -278,6 +278,7 @@ boost_help() {
     echo -e "\tboost help            打印这个帮助"
     echo -e "\tboost init <crid>     初始化项目目录，crid为项目的Aone crid"
     echo -e "\tboost co <appname>    把应用最新分支的代码拉到当前目录"
+    echo -e "\tboost crid            显示该项目的crid"
     echo
     echo -e "\t|---------------------------------------------------"
     echo -e "\t| 以下命令为具体应用相关的命令必须在应用的目录里面运行       "
@@ -290,13 +291,7 @@ boost_help() {
     echo -e "\tboost appinfo         查看应用的一些信息(这个命令只有在应用运行是才行)"
     echo -e "\tboost stop            停止当前目录所代表的应用"
     echo -e "\tboost log             以tail命令查看当前应用的日志"
-    echo -e "\tboost llog            以less命令查看当前应用的日志";
-    echo
-    echo -e "\t|---------------------------------------------------"
-    echo -e "\t| 以下为高级命令(由上面的基本命令组合而成)                 "
-    echo -e "\t|---------------------------------------------------"
-    echo -e "\tboost applist         列出该项目涉及到的所有应用 TO BE IMPLEMENTED"
-    echo -e "\tboost coall           下载该项目的所有应用代码 TO BE IMPLEMENTED"
+    echo -e "\tboost llog            以less命令查看当前应用的日志"
 }
 
 boost_stop() {
@@ -341,6 +336,9 @@ boost() {
             ;;
         llog)
             llog
+            ;;
+        crid)
+            get_crid
             ;;
         help)
             boost_help
