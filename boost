@@ -255,6 +255,7 @@ checkout_newest_code() {
             branch_idx=`get_branch_idx $branch_name`
             local_branch_name=${appname}_${branch_idx}
             svn co $branch_path $local_branch_name
+            touch $local_branch_name/.projectile
             echo "从: " $branch_path " 下载代码到: " $local_branch_name
         else
             echo "该项目中没有这个应用(${appname})"
@@ -331,8 +332,6 @@ boost() {
             ;;
         co)
             checkout_newest_code $2
-            # touch the projectile for emacs
-            touch .projectile
             ;;
         antx)
             gen_antx
