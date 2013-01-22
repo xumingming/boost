@@ -51,8 +51,6 @@ init_project() {
     else
         crid=$1
         echo $crid > .crid
-        # touch .projectile for the emacs projectile-mode
-        touch .projectile
         echo "初始化项目信息成功。"
     fi
 }
@@ -333,6 +331,8 @@ boost() {
             ;;
         co)
             checkout_newest_code $2
+            # touch the projectile for emacs
+            touch .projectile
             ;;
         antx)
             gen_antx
