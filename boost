@@ -1,7 +1,7 @@
 #!/bin/bash 
 
-shared_libs=pylon:trade_shared
-common_libs=pylon
+shared_libs=pylon:pivot:trade_shared
+common_libs=pylon:pivot
 
 # 判断一个应用是不是**公共**二方库
 # NOTE: 如果你有一个新的二方库，请添加到$common_libs变量里面去
