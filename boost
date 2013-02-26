@@ -295,6 +295,10 @@ trunkdiff() {
     svn diff -r${base_rev}:HEAD
 }
 
+trunkstat() {
+    trunkdiff | grep "Index: "
+}
+
 boost_help() {
     echo -e "\tboost help            打印这个帮助"
     echo -e "\tboost init <crid>     初始化项目目录，crid为项目的Aone crid"
@@ -315,6 +319,7 @@ boost_help() {
     echo -e "\tboost llog            以less命令查看当前应用的日志"
     echo -e "\tboost svnlog          显示svn日志"
     echo -e "\tboost trunkdiff       显示该分支跟trunk的diff"
+    echo -e "\tboost trunkstat       显示该分支跟trunk的diff文件名"
 }
 
 boost_stop() {
@@ -368,6 +373,9 @@ boost() {
             ;;
         trunkdiff)
             trunkdiff
+            ;;
+        trunkstat)
+            trunkstat
             ;;
         help)
             boost_help
