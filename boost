@@ -132,14 +132,18 @@ tlog() {
 jmvn () {
     appname=`appname`
 
-    log_path=~/output/${appname}
-    rm -rvf $log_path
+    # 更新代码
+    svn up
 
     is_shared=`is_shared_lib ${appname}`
     echo "开始编译${appname}"
     if [ "$is_shared" == "true" ]; then
         mvn clean install
     else
+        # 删除output目录
+        log_path=~/output/${appname}
+        rm -rvf $log_path
+
         mvn clean install -DuserProp=../antx_`appname`.properties -Dmaven.test.skip=true -DskipValidation=true
     fi
 }
