@@ -96,18 +96,19 @@ appname() {
 # 参数
 #   $1 应用名
 get_log_path() {
+    appname=$1
     case $appname in
         tradecenter)
-          echo ~/output/`appname`/logs/6100/sys/sys.log
+          echo ~/output/${appname}/logs/6100/sys/sys.log
           ;;
         marketing_center)
-          echo ~/output/`appname`/logs/sys/sys.log
+          echo ~/output/${appname}/logs/sys/sys.log
           ;;
         myalibaba)
-          echo ~/output/`appname`/logs/sys/webx.log
+          echo ~/output/${appname}/logs/sys/webx.log
           ;;
         *)
-          echo ~/output/`appname`/logs/sys/webx/webx.log
+          echo ~/output/${appname}/logs/sys/webx/webx.log
           ;;
     esac
 }
@@ -127,6 +128,7 @@ tlog() {
 }
 
 alog() {
+    echo $1
     appname=$1
     log_path=`get_log_path ${appname}`
     less ${log_path}
