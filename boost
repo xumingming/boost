@@ -131,6 +131,10 @@ tlog() {
 # 的文件作为该项目的antx配置文件
 jmvn () {
     appname=`appname`
+
+    log_path=~/output/${appname}
+    rm -rvf $log_path
+
     is_shared=`is_shared_lib ${appname}`
     echo "开始编译${appname}"
     if [ "$is_shared" == "true" ]; then
@@ -161,10 +165,6 @@ jrun() {
 
 # 编译当前应用并且运行
 jmvnrun() {
-    appname=`appname`
-    log_path=~/output/${appname}
-    rm -rvf $log_path
-
     jmvn && jrun
 }
 
