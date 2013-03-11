@@ -161,6 +161,10 @@ jrun() {
 
 # 编译当前应用并且运行
 jmvnrun() {
+    appname=`appname`
+    log_path=~/output/${appname}
+    rm -rvf $log_path
+
     jmvn && jrun
 }
 
