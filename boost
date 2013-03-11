@@ -126,6 +126,12 @@ tlog() {
     tail -f -n 500 ${log_path}
 }
 
+alog() {
+    appname=
+    log_path=`get_log_path ${appname}`
+    less ${log_path}
+}
+
 # 编译当前应用，并且把相关jar/war包安装到本地的maven仓库
 # NOTE 改命令会自动去上层目录寻找名为antx_<appname>.properties
 # 的文件作为该项目的antx配置文件
@@ -325,6 +331,7 @@ boost_help() {
     echo -e "\tboost stop            停止当前目录所代表的应用"
     echo -e "\tboost log             以tail命令查看当前应用的日志"
     echo -e "\tboost llog            以less命令查看当前应用的日志"
+    echo -e "\tboost alog <appname>  在任意目录查看指定应用的日志"
     echo -e "\tboost svnlog          显示svn日志"
     echo -e "\tboost trunkdiff       显示该分支跟trunk的diff"
     echo -e "\tboost trunkstat       显示该分支跟trunk的diff文件名"
@@ -338,7 +345,7 @@ boost_stop() {
 }
 
 # 主入口
-boost() {
+boost() {    
     case $1 in
         init)
             init_project $2
@@ -372,6 +379,9 @@ boost() {
             ;;
         llog)
             llog
+            ;;
+        alog)
+            alog $2
             ;;
         crid)
             get_crid
