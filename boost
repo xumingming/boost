@@ -127,7 +127,7 @@ tlog() {
 }
 
 alog() {
-    appname=
+    appname=$1
     log_path=`get_log_path ${appname}`
     less ${log_path}
 }
